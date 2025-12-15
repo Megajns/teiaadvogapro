@@ -1,0 +1,30 @@
+version: "3.8"
+
+services:
+  teiaadvogapro:
+    image: montjon/teiaadvogapro:latest
+    container_name: app-teiaadvogapro
+    restart: unless-stopped
+
+    environment:
+      VITE_SUPABASE_PROJECT_ID: "https://rgktclpugdlzdthuuxtk.supabase.co"
+      VITE_SUPABASE_PUBLISHABLE_KEY: "sb_publishable_p34ayhhRyIrrS2QCuSKjKw_0KcOrA1w"
+
+    networks:
+      - teiaadvogapro
+
+    labels:
+      - "traefik.enable=true"
+      - "traefik.docker.network=teiaadvogapro"
+
+      - "traefik.http.routers.teiaadvogapro.rule=Host(`teiaadvogapro.teiasisfin.com.br`)"
+      - "traefik.http.routers.teiaadvogapro.entrypoints=websecure"
+      - "traefik.http.routers.teiaadvogapro.tls=true"
+      - "traefik.http.routers.teiaadvogapro.tls.certresolver=letsencrypt"
+
+      # Ajuste a porta se sua imagem NÃO expor 80
+      - "traefik.http.services.teiaadvogapro.loadbalancer.server.port=80"
+
+networks:
+  teiaadvogapro:
+    external: true
